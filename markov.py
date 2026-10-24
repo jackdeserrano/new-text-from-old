@@ -3,12 +3,13 @@ import numpy as np
 from collections import defaultdict
 
 def markov(text, o = 1, sentence_count = 1):
-    assert o in [1,2], "order must be 1 or 2"
+    assert o in [1, 2], "order must be 1 or 2"
     assert isinstance(sentence_count, int) and sentence_count > 0, "sentence count must be a natural number"
 
     text = text.lower()
-    tokens = re.findall(r"(?:mr|mrs|ms|dr|st)\.|\w+(?:['-]\w+)*|[.,?;:]", ". " + text)
+    tokens = re.findall(r"(?:mrs|mr|ms|dr|st)\.|'?\w+(?:['-]\w+)*|[.,?;:!]", ". " + text)
 
+    assert len(tokens) > 1 and tokens[1] not in [".", ",", "?", ";", ":", "!"], "text must have a word" 
     assert tokens[-1] in [".", "?", "!"], "text must end with closing punctuation"
 
     order_one_list = list(dict.fromkeys(tokens))
@@ -59,7 +60,7 @@ def markov(text, o = 1, sentence_count = 1):
     sentence_count = int(sentence_count)
 
     while sentence_count:
-        if curr in stops or curr in semicolon or o == 1:
+        if o == 1 or curr in stops or curr in semicolon:
             succs, ps = order_one_tm[curr]
         else:
             succs, ps = order_two_tm[(prev, curr)]
