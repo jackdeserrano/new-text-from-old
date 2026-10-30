@@ -82,7 +82,6 @@ def markov(text, o = 1, sentence_count = 1):
 
     print(sentences_str)
 
-
 with open("markov.txt", "r") as file:
     text = file.read()
     markov(text)
